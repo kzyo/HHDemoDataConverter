@@ -4,13 +4,12 @@ public class HHDemoDataConverter{
 	// HHdemo(論文のデモアプリ)のデータを変換するプログラム
 	// アプリで記録したデータを、ライブラリとして使えるようにする
 	//
+	static final String FILE_PATH = "//Users//kazuya//Documents//hhdemoRelease//binary//windows//x64//Release//onizawa_tekito.txt";
 	static final int[] ADD_ELEMENT = {9,10,11,13,14,15,16};
 	static final int NUM_OF_ELEMENT = ADD_ELEMENT.length;
 	
 	public static void main(String[] args){
-		String filename = "onizawa_tekito.txt";
-		String directoryPath = "//Users//kazuya//Documents//hhdemoRelease//binary//windows//x64//Release";
-		ConvertRecordedData2LibraryData(directoryPath+"//"+filename);
+		ConvertRecordedData2LibraryData(FILE_PATH);
 	}
 	
 	static void ConvertRecordedData2LibraryData(String path){
@@ -66,16 +65,15 @@ public class HHDemoDataConverter{
 		}
 	}
 	
-	//oの文字数がwidthになるように、sbの後にスペースを追加する
-	static StringBuilder addSpace(Object o, int width){
-		String s = o.toString();
-		int len = s.length();
+	//strの文字数がwidthになるように、strの後にスペースを追加する
+	static StringBuilder addSpace(String str, int width){
 		
+		int len = str.length();
 		StringBuilder sb = new StringBuilder();
 		
 		for (int i = 0; i<width; i++){
 			if (i<len){
-				sb.append(s.charAt(i));
+				sb.append(str.charAt(i));
 			}else{
 				sb.append(" ");
 			}
