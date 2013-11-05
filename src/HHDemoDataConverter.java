@@ -1,14 +1,16 @@
 import java.io.*;
+import java.text.DecimalFormat;
 
 public class HHDemoDataConverter{
 	// HHdemo(論文のデモアプリ)のデータを変換するプログラム
 	// アプリで記録したデータを、ライブラリとして使えるようにする
 	//
-	static final String FILE_PATH = "C:\\Users\\KAZUYA\\Desktop\\hhdemoRelease\\binary\\windows\\x64\\Release\\onizawa_1.txt";
+	static final String FILE_PATH = "C:\\Users\\KAZUYA\\Desktop\\hhdemoRelease\\binary\\windows\\x64\\Release\\onizawa_total" +".txt";
 	static final int[] ADD_ELEMENT = {9,10,11,13,14,15,16}; //元ファイルの各ストロークのうち、変換後ファイルに追加する情報(ここに書かれた順番で追加される)
 	static final boolean reverseY = true; //Y座標を判定させるかどうか(反転させないと、上下逆に出力される)
 	static final boolean ONLY_XY = true; //XY座標とタイムスタンプ以外0にする場合true
 	static final boolean[] XY_ELEMENT = {true,true,true,false,false,false,false};
+	static final DecimalFormat DF = new DecimalFormat("0.000000");
 	static final int NUM_OF_ELEMENT = ADD_ELEMENT.length;
 
 	public static void main(String[] args){
@@ -31,7 +33,7 @@ public class HHDemoDataConverter{
 					int sample_i = 0;
 					StringBuilder tmp = new StringBuilder();
 
-					while(l[20].equals("0x00")){//0x00だとストロークの途中　0x78だと最後の点
+					while((str = br.readLine()) != null){//0x00だとストロークの途中　0x78だと最後の点
 
 						tmp.append(addSpace(Integer.toString(sample_i), 5));
 						for(int i = 0; i<NUM_OF_ELEMENT; i++){
@@ -45,20 +47,20 @@ public class HHDemoDataConverter{
 								tmp.append(addSpace(l[ADD_ELEMENT[i]],14));
 							}
 						}
-						tmp.append("\n");
+						tmp.append("\r\n");
 
 						sample_i++;
-						l = br.readLine().split(" ");
+						l = str.split(" ");
 						if (l.length < 20) break;
 					}
 
 					buf.append("stroke ");
 					buf.append(stroke);
-					buf.append("\n");
+					buf.append("\r\n");
 					buf.append(sample_i);
-					buf.append("\n");
+					buf.append("\r\n");
 					buf.append(tmp);
-					buf.append("\n");
+					buf.append("\r\n");
 
 					stroke++;
 				}
@@ -81,7 +83,25 @@ public class HHDemoDataConverter{
 	//strの文字数がwidthになるように、str（最大10文字）の後にスペースを追加する
 	static StringBuilder addSpace(String str, int width){
 
+		//double d = Double.valueOf(str);
+		//str = DF.format(d);
+		System.out.println(str);
+
 		int len = str.length();
+/*
+		if (len>1){
+			for (int i=len-1;i>0;i--){
+				if (str.charAt(i) == '0' || str.charAt(i) == '.'){
+					str = str.substring(0, i);
+					len = i;
+				}else{
+					break;
+				}
+			}
+		}*/
+
+		System.out.println(str);
+
 		if (len>9) len = 9;
 		StringBuilder sb = new StringBuilder();
 
@@ -97,7 +117,7 @@ public class HHDemoDataConverter{
 	}
 
 	static String LibraryHeader(){
-		return "#\nVersion 0.0\n#\n\nphotoshop 5\n1\nunrelated\n\n";
+		return "#\r\nVersion 0.0\r\n#\r\n\r\nphotoshop 5\r\n1\r\nunrelated\r\n\r\n";
 	}
 
 }
